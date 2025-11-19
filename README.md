@@ -7,7 +7,7 @@ We compile a new dataset of **503,875 RGB images**, released under a **CC-BY lic
 
 Resolutions range from **640×450** to **1280×720**. The images come from public videos under **CC0** or **Open Licence**.
 
-Each image is manually annotated by **three independent annotators** on **13 criteria**, of which **12 concern weather** and **1 concerns the *viewpoint*** (an informative criterion not used for training, intended to diversify the dataset by perspective).
+Each image is manually annotated by **three independent annotators** on **13 criteria**, of which **12 concern weather(53 classes)** and **1 concerns the *viewpoint*** (an informative criterion not used for training, intended to diversify the dataset by perspective).
 
 The 13 criteria are:
 
