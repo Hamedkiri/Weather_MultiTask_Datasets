@@ -136,3 +136,12 @@ The [`Annotations.py`](https://github.com/Hamedkiri/Weather_MultiTask_Datasets/b
 - and **automatically generate** the statistical figures shown above (global distributions, per-task distributions, etc.).
 
 Examples of usage and how to generate these statistics will be added soon in the repository documentation.
+
+1. **Install dependencies**
+
+   In a terminal, at the root of the project:
+
+   ```bash
+   pip install -r requirements.txt
+
+2. **Watch the video**

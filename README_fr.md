@@ -135,4 +135,11 @@ Le script [`Annotations.py`](https://github.com/Hamedkiri/Weather_MultiTask_Data
 - de réaliser **vos propres annotations**,  
 - et de **générer automatiquement** les figures de statistiques présentées ci-dessus (distributions globales, par tâche, etc.).
 
-Des exemples d’utilisation et de génération de ces statistiques seront ajoutés prochainement dans la documentation du dépôt.
+1. **Installer les dépendances**
+
+   Dans un terminal, à la racine du projet :
+
+   ```bash
+   pip install -r requirements.txt
+   
+2. **Regardez la vidéo**
