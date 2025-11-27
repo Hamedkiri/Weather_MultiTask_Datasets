@@ -145,3 +145,8 @@ Examples of usage and how to generate these statistics will be added soon in the
    pip install -r requirements.txt
 
 2. **Watch the video**
+
+   
+
+https://github.com/user-attachments/assets/b55154e3-e507-49f3-8aa3-50facb18c638
+
