@@ -143,3 +143,8 @@ Le script [`Annotations.py`](https://github.com/Hamedkiri/Weather_MultiTask_Data
    pip install -r requirements.txt
    
 2. **Regardez la vidéo**
+
+   
+
+https://github.com/user-attachments/assets/3bc88461-353d-4728-bedb-459955faf954
+
