@@ -240,6 +240,9 @@ class ImageAnnotator:
         self.root.geometry("1300x800")
         self.root.resizable(True, True)
 
+        # 0) Langue de l'interface : À DÉFINIR ICI
+        self.ui_lang_var = tk.StringVar(value="EN")  # interface EN par défaut
+
         # Données principales
         self.images: List[str] = []
         self.annotations: Dict[str, Dict[str, dict]] = {}
@@ -286,9 +289,9 @@ class ImageAnnotator:
         self.manager_tab = ttk.Frame(self.notebook)
         self.stats_tab = ttk.Frame(self.notebook)
 
-        self.notebook.add(self.annotation_tab, text="Annotation")
-        self.notebook.add(self.manager_tab, text="Gestion des Annotations")
-        self.notebook.add(self.stats_tab, text="Statistiques")
+        self.notebook.add(self.annotation_tab, text=self._ui("tab_annotation"))
+        self.notebook.add(self.manager_tab, text=self._ui("tab_manager"))
+        self.notebook.add(self.stats_tab, text=self._ui("tab_stats"))
 
         # 4) UI avec conteneur scrollable de chaque onglet
         self.create_annotation_tab_ui(self.annotation_tab)
@@ -308,6 +311,12 @@ class ImageAnnotator:
         self.root.bind('<Configure>', self.on_window_resize)
         self.root.bind('<Left>', self.on_left_arrow)
         self.root.bind('<Right>', self.on_right_arrow)
+
+        # 2) Sélecteur de langue UI en haut de fenêtre
+        self.setup_ui_language_switch()
+
+        # Langue de l'interface (EN par défaut)
+        # "EN" -> interface en anglais, "FR" -> interface en français
 
     # ---------------------------------------------------------
     # Résolution robuste des chemins d'image venant des annotations
@@ -503,13 +512,40 @@ class ImageAnnotator:
         # Top actions
         top_frame = tk.Frame(main_frame)
         top_frame.grid(row=0, column=0, columnspan=2, pady=5)
-        tk.Button(top_frame, text="Charger annotations existantes", command=self.load_annotations).pack(side=tk.LEFT, padx=5)
-        tk.Button(top_frame, text="Créer un nouveau fichier d'annotations", command=self.create_new_annotations).pack(side=tk.LEFT, padx=5)
-        self.load_more_btn = tk.Button(top_frame, text="Charger images supplémentaires", command=self.load_additional_images)
+        self.btn_load_annotations = tk.Button(
+            top_frame,
+            text=self._ui("btn_load_ann"),
+            command=self.load_annotations
+        )
+        self.btn_load_annotations.pack(side=tk.LEFT, padx=5)
+
+        self.btn_create_annotations = tk.Button(
+            top_frame,
+            text=self._ui("btn_create_ann"),
+            command=self.create_new_annotations
+        )
+        self.btn_create_annotations.pack(side=tk.LEFT, padx=5)
+
+        self.load_more_btn = tk.Button(
+            top_frame,
+            text=self._ui("btn_load_more"),
+            command=self.load_additional_images
+        )
         self.load_more_btn.pack(side=tk.LEFT, padx=5)
-        tk.Button(top_frame, text="Gérer les annotations", command=self.open_annotation_manager).pack(side=tk.LEFT, padx=5)
-        # Nouveau : charger directement la liste d’images depuis le JSON résolu
-        tk.Button(top_frame, text="Charger images depuis le JSON (résolu)", command=self.use_images_from_annotations).pack(side=tk.LEFT, padx=5)
+
+        self.btn_open_manager = tk.Button(
+            top_frame,
+            text=self._ui("btn_manage_ann"),
+            command=self.open_annotation_manager
+        )
+        self.btn_open_manager.pack(side=tk.LEFT, padx=5)
+
+        self.btn_use_json_images = tk.Button(
+            top_frame,
+            text=self._ui("btn_use_json_images"),
+            command=self.use_images_from_annotations
+        )
+        self.btn_use_json_images.pack(side=tk.LEFT, padx=5)
 
         # Content split
         content_frame = tk.Frame(main_frame)
@@ -548,9 +584,9 @@ class ImageAnnotator:
 
         self.buttons_frame = tk.Frame(bottom_frame)
         self.buttons_frame.pack()
-        self.prev_button = tk.Button(self.buttons_frame, text="Précédent", command=self.prev_image)
+        self.prev_button = tk.Button(self.buttons_frame, text=self._ui("btn_prev"), command=self.prev_image)
         self.prev_button.pack(side=tk.LEFT, padx=5)
-        self.next_button = tk.Button(self.buttons_frame, text="Suivant", command=self.next_image)
+        self.next_button = tk.Button(self.buttons_frame, text=self._ui("btn_next"), command=self.next_image)
         self.next_button.pack(side=tk.LEFT, padx=5)
 
         # Cases à cocher
@@ -558,26 +594,38 @@ class ImageAnnotator:
         mode_frame.pack(pady=2)
 
         self.browse_mode_var = tk.BooleanVar(value=False)
-        tk.Checkbutton(
+        self.browse_checkbutton = tk.Checkbutton(
             mode_frame,
-            text="Parcourir (lecture seule, n'écrit rien)",
+            text=self._ui("chk_browse"),
             variable=self.browse_mode_var,
             command=self.toggle_browse_mode
-        ).grid(row=0, column=0, padx=6, sticky="w")
+        )
+        self.browse_checkbutton.grid(row=0, column=0, padx=6, sticky="w")
 
         self.only_annotated_var = tk.BooleanVar(value=False)
-        tk.Checkbutton(
+        self.only_annotated_checkbutton = tk.Checkbutton(
             mode_frame,
-            text="Parcourir uniquement les images déjà annotées (depuis le JSON)",
+            text=self._ui("chk_only_annotated"),
             variable=self.only_annotated_var,
             command=self.toggle_only_annotated_mode
-        ).grid(row=0, column=1, padx=6, sticky="w")
+        )
+        self.only_annotated_checkbutton.grid(row=0, column=1, padx=6, sticky="w")
 
-        self.change_defaults_btn = tk.Button(bottom_frame, text="Changer les valeurs par défaut", command=self.setup_defaults)
+        self.change_defaults_btn = tk.Button(
+            bottom_frame,
+            text=self._ui("btn_change_defaults"),
+            command=self.setup_defaults
+        )
         self.change_defaults_btn.pack(pady=5)
-        self.change_save_path_btn = tk.Button(bottom_frame, text="Changer le chemin de sauvegarde", command=self.change_save_path)
+
+        self.change_save_path_btn = tk.Button(
+            bottom_frame,
+            text=self._ui("btn_change_save"),
+            command=self.change_save_path
+        )
         self.change_save_path_btn.pack(pady=5)
-        self.save_path_label = tk.Label(bottom_frame, text="Chemin de sauvegarde: Non spécifié")
+
+        self.save_path_label = tk.Label(bottom_frame, text=self._ui("label_save_path_none"))
         self.save_path_label.pack()
 
         # Etat initial
@@ -1095,7 +1143,8 @@ class ImageAnnotator:
         # --- Langue ---
         lang_frame = tk.LabelFrame(main_frame, text="Langue des graphiques / Charts Language")
         lang_frame.pack(fill="x", pady=5)
-        self.stats_lang_var = tk.StringVar(value="FR")
+        self.stats_lang_var = tk.StringVar(value="EN")
+
         tk.Radiobutton(lang_frame, text="Français", variable=self.stats_lang_var, value="FR").pack(side=tk.LEFT, padx=8)
         tk.Radiobutton(lang_frame, text="English", variable=self.stats_lang_var, value="EN").pack(side=tk.LEFT, padx=8)
 
@@ -1127,6 +1176,158 @@ class ImageAnnotator:
 
         self.stats_canvas_frame = tk.Frame(main_frame)
         self.stats_canvas_frame.pack(fill="both", expand=True, pady=10)
+
+    def _ui(self, key: str) -> str:
+        """
+        Traduction des textes d'interface (boutons, onglets, labels).
+        self.ui_lang_var.get() == "EN" -> texte anglais
+        self.ui_lang_var.get() == "FR" -> texte français
+        """
+        FR = {
+            # Onglets
+            "tab_annotation": "Annotation",
+            "tab_manager": "Gestion des Annotations",
+            "tab_stats": "Statistiques",
+
+            # Onglet Annotation - haut
+            "btn_load_ann": "Charger annotations existantes",
+            "btn_create_ann": "Créer un nouveau fichier d'annotations",
+            "btn_load_more": "Charger images supplémentaires",
+            "btn_manage_ann": "Gérer les annotations",
+            "btn_use_json_images": "Charger images depuis le JSON (résolu)",
+
+            # Onglet Annotation - bas
+            "btn_prev": "Précédent",
+            "btn_next": "Suivant",
+            "chk_browse": "Parcourir (lecture seule, n'écrit rien)",
+            "chk_only_annotated": "Parcourir uniquement les images déjà annotées (depuis le JSON)",
+            "btn_change_defaults": "Changer les valeurs par défaut",
+            "btn_change_save": "Changer le chemin de sauvegarde",
+            "label_save_path_none": "Chemin de sauvegarde: Non spécifié",
+
+            # Sélecteur de langue
+            "lang_title": "Langue de l'interface / UI Language",
+            "lang_fr": "Français",
+            "lang_en": "English",
+        }
+
+        EN = {
+            # Tabs
+            "tab_annotation": "Annotation",
+            "tab_manager": "Annotations Manager",
+            "tab_stats": "Statistics",
+
+            # Annotation tab - top
+            "btn_load_ann": "Load existing annotations",
+            "btn_create_ann": "Create new annotation file",
+            "btn_load_more": "Load additional images",
+            "btn_manage_ann": "Open annotation manager",
+            "btn_use_json_images": "Load images from JSON (resolved)",
+
+            # Annotation tab - bottom
+            "btn_prev": "Previous",
+            "btn_next": "Next",
+            "chk_browse": "Browse mode (read-only, no write)",
+            "chk_only_annotated": "Browse only images already annotated (from JSON)",
+            "btn_change_defaults": "Change default values",
+            "btn_change_save": "Change save path",
+            "label_save_path_none": "Save path: Not specified",
+
+            # Language selector
+            "lang_title": "UI Language / Langue de l'interface",
+            "lang_fr": "French",
+            "lang_en": "English",
+        }
+
+        d = EN if self.ui_lang_var.get() == "EN" else FR
+        return d.get(key, key)
+
+    def setup_ui_language_switch(self):
+        """
+        Crée un petit cadre en haut de la fenêtre pour choisir la langue de l'interface.
+        À appeler une fois dans __init__.
+        """
+        top_lang_frame = tk.Frame(self.root)
+        top_lang_frame.pack(fill="x", side="top", pady=2)
+
+        label = tk.Label(top_lang_frame, text=self._ui("lang_title"))
+        label.pack(side="left", padx=5)
+
+        rb_fr = tk.Radiobutton(
+            top_lang_frame,
+            text=self._ui("lang_fr"),
+            variable=self.ui_lang_var,
+            value="FR",
+            command=self.on_ui_language_change
+        )
+        rb_fr.pack(side="left", padx=5)
+
+        rb_en = tk.Radiobutton(
+            top_lang_frame,
+            text=self._ui("lang_en"),
+            variable=self.ui_lang_var,
+            value="EN",
+            command=self.on_ui_language_change
+        )
+        rb_en.pack(side="left", padx=5)
+
+        # On garde une référence si on veut mettre à jour les textes au changement de langue
+        self._lang_widgets = {
+            "label": label,
+            "rb_fr": rb_fr,
+            "rb_en": rb_en,
+        }
+
+    def on_ui_language_change(self):
+        """
+        Callback quand la langue UI change.
+        Met à jour les textes des onglets, de quelques boutons, et du sélecteur de langue.
+        Tu peux ajouter ici d'autres widgets au fur et à mesure.
+        """
+        # Mettre à jour le sélecteur lui-même
+        if hasattr(self, "_lang_widgets"):
+            self._lang_widgets["label"].config(text=self._ui("lang_title"))
+            self._lang_widgets["rb_fr"].config(text=self._ui("lang_fr"))
+            self._lang_widgets["rb_en"].config(text=self._ui("lang_en"))
+
+        # Onglets du notebook
+        self.notebook.tab(self.annotation_tab, text=self._ui("tab_annotation"))
+        self.notebook.tab(self.manager_tab, text=self._ui("tab_manager"))
+        self.notebook.tab(self.stats_tab, text=self._ui("tab_stats"))
+
+        # Boutons de l'onglet Annotation (si ils existent déjà)
+        if hasattr(self, "btn_load_annotations"):
+            self.btn_load_annotations.config(text=self._ui("btn_load_ann"))
+        if hasattr(self, "btn_create_annotations"):
+            self.btn_create_annotations.config(text=self._ui("btn_create_ann"))
+        if hasattr(self, "btn_load_more_images"):
+            self.btn_load_more_images.config(text=self._ui("btn_load_more"))
+        if hasattr(self, "btn_open_manager"):
+            self.btn_open_manager.config(text=self._ui("btn_manage_ann"))
+        if hasattr(self, "btn_use_json_images"):
+            self.btn_use_json_images.config(text=self._ui("btn_use_json_images"))
+
+        if hasattr(self, "prev_button"):
+            self.prev_button.config(text=self._ui("btn_prev"))
+        if hasattr(self, "next_button"):
+            self.next_button.config(text=self._ui("btn_next"))
+
+        if hasattr(self, "browse_checkbutton"):
+            self.browse_checkbutton.config(text=self._ui("chk_browse"))
+        if hasattr(self, "only_annotated_checkbutton"):
+            self.only_annotated_checkbutton.config(text=self._ui("chk_only_annotated"))
+
+        if hasattr(self, "change_defaults_btn"):
+            self.change_defaults_btn.config(text=self._ui("btn_change_defaults"))
+        if hasattr(self, "change_save_path_btn"):
+            self.change_save_path_btn.config(text=self._ui("btn_change_save"))
+
+        if hasattr(self, "save_path_label") and \
+                (self.annotation_file_path is None or self.annotation_file_path == "" or
+                 self.save_path_label.cget("text").startswith("Chemin de sauvegarde") or
+                 self.save_path_label.cget("text").startswith("Save path")):
+            # Si aucun chemin défini ou texte par défaut, on remet le texte par défaut dans la bonne langue
+            self.save_path_label.config(text=self._ui("label_save_path_none"))
 
     # Traductions
     def _t(self, key: str) -> str:
