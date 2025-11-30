@@ -74,17 +74,17 @@ over adjacent pairs retained within the same source.
 - **Full dataset (503,875)**  
   - `Δf̄ = 38.63`  
   - See:  
-    ![Frame proximity (full dataset): intra-video redundancy and inter-video heterogeneity](images/Datasets/statiscs_graphs/repartition_all_datas.png)
+    ![Frame proximity (full dataset): intra-video redundancy and inter-video heterogeneity](images/Datasets/statiscs_graphs/train_test_statistiques/all_data_heterogeneity.png)
 
 - **Train (250k)**  
   - `Δf̄ = 62.75`  
   - Quotas harmonized via Hamilton:  
-    ![Train (250k): mean frame-index gap and per-source quotas via combined Hamilton](images/Datasets/train_test_statistiques/train_heterogeneity.png)
+    ![Train (250k): mean frame-index gap and per-source quotas via combined Hamilton](images/Datasets/statiscs_graphs/train_test_statistiques/train_heterogeneity.png)
 
 - **Test (25k)**  
   - `Δf̄ = 427.65` (very sparse sampling)  
   - See:  
-    ![Test (25k): very high mean frame-index gap and aligned per-source distribution](images/Datasets/train_test_statistiques/test_heterogeneity.png)
+    ![Test (25k): very high mean frame-index gap and aligned per-source distribution](images/Datasets/statiscs_graphs/train_test_statistiques/test_heterogeneity.png)
 
 ### Expected Effects
 
