@@ -75,17 +75,17 @@ sur les paires adjacentes retenues dans une même source.
 - **Jeu complet (503 875)**  
   - `Δf̄ = 38,63`  
   - Voir :  
-    ![Proximité des frames (jeu complet) : redondance intra-vidéo et hétérogénéité inter-vidéo](images/Datasets/statiscs_graphs/repartition_all_datas.png)
+    ![Proximité des frames (jeu complet) : redondance intra-vidéo et hétérogénéité inter-vidéo](images/Datasets/statiscs_graphs/train_test_statistiques/all_data_heterogeneity.png)
 
 - **Train (250k)**  
   - `Δf̄ = 62,75`  
   - Quotas harmonisés via Hamilton :  
-    ![Train (250k) : écart moyen d’indices et quotas par source via Hamilton combiné](images/Datasets/train_test_statistiques/train_heterogeneity.png)
+    ![Train (250k) : écart moyen d’indices et quotas par source via Hamilton combiné](images/Datasets/statiscs_graphs/train_test_statistiques/train_heterogeneity.png)
 
 - **Test (25k)**  
   - `Δf̄ = 427,65` (échantillonnage très espacé)  
   - Voir :  
-    ![Test (25k) : écart moyen très élevé et distribution par source alignée](images/Datasets/train_test_statistiques/test_heterogeneity.png)
+    ![Test (25k) : écart moyen très élevé et distribution par source alignée](images/Datasets/statiscs_graphs/train_test_statistiques/test_heterogeneity.png)
 
 ### Effets attendus
 
