@@ -7,8 +7,8 @@ Les données sont disponibles sous licence **CC-BY**.
 Toute utilisation du jeu de données doit **citer l’article associé** (à venir) ou **les auteurs**  
 (voir la [licence](https://github.com/Hamedkiri/Weather_MultiTask_Datasets?tab=License-1-ov-file) pour plus d’informations).
 
-- 📦 **Images** : *(à compléter)*  
-- 📝 **Annotations complètes** : *(à compléter)*  
+- 📦 **Images** : *https://cerema.box.com/v/MultitaskWeatherDatasetImages*  
+- 📝 **Annotations complètes** : *https://cerema.box.com/v/MultiWDAnnotations* 
 - 📝 **Annotations `train`** : *(à compléter)*  
 - 📝 **Annotations `test`** : *(à compléter)*  
 
